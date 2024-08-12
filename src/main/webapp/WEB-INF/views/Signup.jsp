@@ -13,15 +13,18 @@
         <form action="signup" method="post">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name">
+                <span class="error-details">${fullnameError}</span>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email">
+                <span class="error-details">${emailError}</span>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password">
+                <span class="error-details">${passError}</span>
             </div>
             <button type="submit">Signup</button>
         </form>
