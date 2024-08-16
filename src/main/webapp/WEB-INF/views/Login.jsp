@@ -12,10 +12,12 @@
             <h1>Login</h1>
             <form action="login" method="post">
                 <div class="textbox">
-                    <input type="text" name="email" required placeholder="Email">
+                    <input type="text" name="email" placeholder="Email" value="${email}">
+                    <span class="error-details">${emailError}</span>
                 </div>
                 <div class="textbox">
-                    <input type="password" name="password" required placeholder="Password">
+                    <input type="text" name="password" placeholder="Password" value="${password}">
+                    <span class="error-details">${passwordError}</span>
                 </div>
                 <button type="submit" class="btn">Login</button>
                 <div class="signup-link">

@@ -22,7 +22,7 @@ public class SessionController {
   @Autowired
   UserRepository userRepository;
 
-  @Autowired 
+  @Autowired
   Validators validator;
 
   @Autowired
@@ -46,7 +46,7 @@ public class SessionController {
     } else {
       user.setPassword(encoder.encode(user.getPassword()));
       userRepository.save(user);
-      return "Signup";
+      return "redirect:/loginpage";
     }
   }
 
@@ -56,10 +56,39 @@ public class SessionController {
   }
 
   @PostMapping("/login")
-  public String login(@RequestParam("email") String email, @RequestParam("password") String password,
-      HttpServletResponse response, Model model) {
-    UserEntity user = userRepository.findByEmail(email);
-    if (user != null && user.getPassword().equals(password)) {
+  public String login(
+      @RequestParam("email") String email,
+      @RequestParam("password") String password,
+      HttpServletResponse response,
+      Model model) {
+    boolean authStatus = true;
+    UserEntity user = null;
+
+    if (email.isEmpty()) {
+      model.addAttribute("emailError", "Email can't be empty");
+      authStatus = false;
+    }
+    if (password.isEmpty()) {
+      model.addAttribute("passwordError", "Password can't be empty");
+      authStatus = false;
+    }
+
+    if (authStatus) {
+      user = userRepository.findByEmail(email);
+      if (user == null) {
+        model.addAttribute("emailError", "Email doesn't exist");
+        authStatus = false;
+      } else if (!encoder.matches(password, user.getPassword())) {
+        model.addAttribute("passwordError", "Password doesn't match");
+        authStatus = false;
+      }
+    }
+
+    model.addAttribute("email", email);
+    model.addAttribute("password", password);
+
+    if (authStatus) {
+      @SuppressWarnings("null")
       Cookie cookie = new Cookie("user", user.getUserId().toString());
       cookie.setPath("/");
       cookie.setHttpOnly(true);

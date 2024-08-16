@@ -13,17 +13,17 @@
         <form action="signup" method="post">
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" value="${user.name}">
                 <span class="error-details">${fullnameError}</span>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email">
+                <input type="email" id="email" name="email" value="${user.email}">
                 <span class="error-details">${emailError}</span>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
+                <input type="text" id="password" name="password" value="${user.password}">
                 <span class="error-details">${passError}</span>
             </div>
             <button type="submit">Signup</button>

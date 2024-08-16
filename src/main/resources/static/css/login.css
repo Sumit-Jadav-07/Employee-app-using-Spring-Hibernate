@@ -34,7 +34,8 @@ body, html {
 
 .textbox {
   margin-bottom: 20px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .textbox input {
@@ -87,4 +88,11 @@ body, html {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+span{
+  width: 100%;
+  margin-top: 5px;
+  color: red;
+  text-align: left;
 }

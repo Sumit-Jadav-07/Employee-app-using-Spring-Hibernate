@@ -11,15 +11,11 @@
         <input type="hidden" name="userId" value="${user.userId}">
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="${user.name}" required>
+            <input type="text" id="name" name="name" value="${user.name}">
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="${user.email}" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="email" id="email" name="email" value="${user.email}">
         </div>
         <div class="form-group">
             <button type="submit">Update</button>

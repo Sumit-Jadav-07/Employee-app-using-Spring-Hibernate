@@ -14,6 +14,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 300px;
+  animation: fadeIn 1s ease-in-out;
 }
 
 .signup-container h2 {
@@ -23,6 +24,8 @@ body {
 
 .form-group {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
@@ -55,6 +58,12 @@ button:hover {
 
 span{
   width: 100%;
-  margin-top: 20px;
+  margin-top: 5px;
   color: red;
+  text-align: left;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
