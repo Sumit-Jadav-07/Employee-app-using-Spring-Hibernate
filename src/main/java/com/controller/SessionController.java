@@ -11,10 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.entity.UserEntity;
 import com.repository.UserRepository;
+import com.service.OtpService;
 import com.service.Validators;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SessionController {
@@ -27,6 +29,12 @@ public class SessionController {
 
   @Autowired
   BCryptPasswordEncoder encoder;
+
+  @Autowired
+  OtpService otpService;
+
+  // @Autowired
+  // JavaMailSender sender;
 
   @GetMapping("/signuppage")
   public String signUpPage() {
@@ -99,5 +107,61 @@ public class SessionController {
       return "Login";
     }
   }
+
+  @GetMapping("/logout")
+  public String logout(HttpServletResponse response) {
+    Cookie cookie = new Cookie("user", "");
+    cookie.setPath("/");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
+    return "redirect:/loginpage";
+  }
+
+  @GetMapping("/sendotppage")
+  public String sendOtpPage() {
+    return "SendOtp";
+  }
+
+  @PostMapping("/sendotp")
+  public String sendOtp(@RequestParam("email") String email, Model model, HttpSession session) {
+    UserEntity user = userRepository.findByEmail(email);
+    if (user != null) {
+      model.addAttribute("email", email);
+      String otp = otpService.getOtp();
+      // SimpleMailMessage message = new SimpleMailMessage();
+      // message.setFrom("noreplyonthisemail7@gmail.com");
+      // message.setTo(email);
+      // message.setSubject("Your One Time Password");
+      // message.setText("Your OTP Code is : " + otp);
+      session.setAttribute("otp", otp);
+      return "redirect:/forgotpassword";
+    } else {
+      model.addAttribute("emailError", "Email doesn't exist");
+      return "SendOtp";
+    }
+  }
+
+  @PostMapping("/forgotpassword")
+  public String forgotPassword(@RequestParam("email") String email,
+      @RequestParam("password") String password,
+      @RequestParam("otp") String otp, Model model, HttpSession session) {
+    String emailError = validator.emailValidation(email, model);
+    String passwordError = validator.passwordValidation(password, model);
+    String oldOtp = (String)session.getAttribute("otp");
+    String otpError = validator.otpValidation(oldOtp, otp, model);
+    
+    UserEntity user = userRepository.findByEmail(email);
+    model.addAttribute("user", user);
+
+    if (!emailError.isEmpty() || !passwordError.isEmpty() || !otpError.isEmpty()) {
+      return "ForgotPassword";
+    } else {
+      user.setPassword(encoder.encode(password));
+      userRepository.save(user);
+      return "redirect:/loginpage";
+    }
+  }
+  
+
 
 }

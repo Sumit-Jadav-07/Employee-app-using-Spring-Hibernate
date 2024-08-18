@@ -23,6 +23,9 @@
                 <div class="signup-link">
                     <p>Don't have an account? <a href="signuppage">Sign Up</a></p>
                 </div>
+                <div class="signup-link">
+                    <p>Forgot Password? <a href="sendotppage">Click here</a></p>
+                </div>
             </form>
         </div>
     </div>
