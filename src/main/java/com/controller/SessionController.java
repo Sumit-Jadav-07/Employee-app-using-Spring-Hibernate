@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +35,8 @@ public class SessionController {
   @Autowired
   OtpService otpService;
 
-  // @Autowired
-  // JavaMailSender sender;
+  @Autowired
+  JavaMailSender sender;
 
   @GetMapping("/signuppage")
   public String signUpPage() {
@@ -128,18 +130,26 @@ public class SessionController {
     if (user != null) {
       model.addAttribute("email", email);
       String otp = otpService.getOtp();
-      // SimpleMailMessage message = new SimpleMailMessage();
-      // message.setFrom("noreplyonthisemail7@gmail.com");
-      // message.setTo(email);
-      // message.setSubject("Your One Time Password");
-      // message.setText("Your OTP Code is : " + otp);
+      SimpleMailMessage message = new SimpleMailMessage();
+      message.setFrom("noreplyonthisemail7@gmail.com");
+      message.setTo(email);
+      message.setSubject("Your One Time Password");
+      message.setText("Your OTP Code is : " + otp);
+      sender.send(message);
       session.setAttribute("otp", otp);
-      return "redirect:/forgotpassword";
+      System.out.println("OTP : " + otp);
+      return "redirect:/forgotpasswordpage";
     } else {
       model.addAttribute("emailError", "Email doesn't exist");
       return "SendOtp";
     }
   }
+
+  @GetMapping("/forgotpasswordpage")
+  public String forgotPasswordPage() {
+      return "ForgotPassword";
+  }
+  
 
   @PostMapping("/forgotpassword")
   public String forgotPassword(@RequestParam("email") String email,
